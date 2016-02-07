@@ -135,6 +135,6 @@ foreach ($users as $login => $data) {
 	if (strpos($data["home"], "/srv/") === 0) {
 		$home = $data["home"];
 		$parent = dirname($home);
-		echo "rsync -e \"ssh -i /etc/local/.ssh/key-$target\" -av $home $target:$parent\n";
+		echo "rsync -e \"ssh -i /etc/local/.ssh/key-$target\" -av $target:$home $parent\n";
 	}
 }

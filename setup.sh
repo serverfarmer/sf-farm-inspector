@@ -11,7 +11,7 @@ if [ ! -f /etc/local/.config/expand.json ]; then
 fi
 
 if ! grep -q /opt/sf-farm-inspector/cron/check.sh /etc/crontab; then
-	echo "48 6 * * *   root /opt/sf-farm-inspector/cron/users.sh root@target-server.office" >>/etc/crontab
+	echo "48 6 * * *   root /opt/sf-farm-inspector/cron/users.sh" >>/etc/crontab
 	echo "49 6 * * *   root /opt/sf-farm-inspector/cron/network.sh" >>/etc/crontab
 	echo "10 7 * * 1-6 root /opt/sf-farm-inspector/cron/space.sh" >>/etc/crontab
 	echo "10 7 * * 7   root /opt/sf-farm-inspector/cron/space.sh --force" >>/etc/crontab

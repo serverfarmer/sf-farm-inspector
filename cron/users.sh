@@ -18,10 +18,10 @@ for server in $servers; do
 
 	sshkey=`ssh_management_key_storage_filename $host`
 
-	/opt/sf-farm-inspector/utils/users.php $host $1 $port root $sshkey \
+	/opt/sf-farm-inspector/utils/users.php $host root@$host $port root $sshkey \
 		|/opt/sf-farm-inspector/utils/save.sh /var/cache/farm users-$host.script
 
 done
 
-/opt/sf-farm-inspector/utils/users.php "" $1 "" "" "" \
+/opt/sf-farm-inspector/utils/users.php "" root@$HOST "" "" "" \
 	|/opt/sf-farm-inspector/utils/save.sh /var/cache/farm users-$HOST.script
