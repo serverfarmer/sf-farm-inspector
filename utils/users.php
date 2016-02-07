@@ -84,12 +84,17 @@ if (!empty($required_groups))
 	echo "\n";
 
 foreach ($users as $login => $data) {
+	$uidgid = $data["uid"];
 	$cmd = "useradd -s " . $data["shell"];
 
 	if (empty($data["usergroup"]))
 		$cmd .= " -g " . $data["group"];
+	else {
+		echo "groupadd -g $uidgid $login\n";
+		$cmd .= " -g $login";
+	}
 
-	$cmd .= " -u " . $data["uid"];
+	$cmd .= " -u $uidgid";
 
 	if (!empty($data["gecos"]))
 		$cmd .= " -c \"" . $data["gecos"] . "\"";
