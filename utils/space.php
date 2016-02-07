@@ -65,14 +65,17 @@ class Capacity
 		}
 	}
 
-	public function get($fs, $mode)
+	public function get($fs, $mp, $mode)
 	{
 		if (isset($this->df[$fs][$mode]))
 			return $this->df[$fs][$mode];
 		else if (isset($this->df["/dev/$fs"][$mode]))
 			return $this->df["/dev/$fs"][$mode];
 		else
-			return "";
+			foreach ($this->df as $index => $data)
+				if ($mp == $data["path"])
+					return $this->df[$index][$mode];
+		return "";
 	}
 }
 
@@ -216,7 +219,7 @@ foreach ($mounts as $partition => $path)
 	$print = preg_replace("#/srv/(.*)/#s", "", $path);
 
 	$usage[$print] = get_directory_usage($path, $expand_directories);
-	$capacity[$print] = $space->get($partition, "capacity");
+	$capacity[$print] = $space->get($partition, $path, "capacity");
 }
 
 echo prepare_json_array(array (
