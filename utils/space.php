@@ -205,8 +205,7 @@ if (!$force) {
 	$capacity = array();
 }
 
-foreach ($mounts as $partition => $path)
-{
+foreach ($mounts as $partition => $path) {
 	if (in_array($path, $less_often_reports, true) && !$force)
 		continue;
 
@@ -220,6 +219,14 @@ foreach ($mounts as $partition => $path)
 
 	$usage[$print] = get_directory_usage($path, $expand_directories);
 	$capacity[$print] = $space->get($partition, $path, "capacity");
+}
+
+if ($force) {
+	$script = "/opt/sf-standby-monitor/cron/list.sh";
+	$devices = Executor::execute("ls $script >/dev/null 2>/dev/null && $script");
+
+	foreach ($devices as $device)
+		Executor::execute("hdparm -y $device 2>/dev/null");
 }
 
 echo prepare_json_array(array (
