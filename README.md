@@ -6,4 +6,4 @@ sf-farm-inspector extension provides scripts allowing:
 - analyzing disk usage on all hosts in a farm, and provide JSON files
   with usage data, that can be further analyzed by some external tool
 - dumping configuration from network devices (currently from MikroTik
-  routers; support for Cisco routers is planned for near future)
+  and Cisco IOS based routers)
