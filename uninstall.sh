@@ -1,5 +1,5 @@
 #!/bin/sh
 
-if grep -q /opt/sf-farm-inspector/cron /etc/crontab; then
-	sed -i -e "/\/opt\/sf-farm-inspector\/cron/d" /etc/crontab
+if grep -q /opt/farm/ext/farm-inspector/cron /etc/crontab; then
+	sed -i -e "/\/opt\/farm\/ext\/farm-inspector\/cron/d" /etc/crontab
 fi

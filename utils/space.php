@@ -222,7 +222,7 @@ foreach ($mounts as $partition => $path) {
 }
 
 if ($force) {
-	$script = "/opt/sf-standby-monitor/cron/list.sh";
+	$script = "/opt/farm/ext/standby-monitor/cron/list.sh";
 	$devices = Executor::execute("ls $script >/dev/null 2>/dev/null && $script");
 
 	foreach ($devices as $device)
