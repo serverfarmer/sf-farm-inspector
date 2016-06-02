@@ -3,7 +3,7 @@
 . /opt/farm/scripts/functions.custom
 
 
-path=/etc/local/.config
+path=/etc/local/.farm
 servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts $path/problematic.hosts`"
 
 for server in $servers; do

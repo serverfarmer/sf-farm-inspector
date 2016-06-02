@@ -1,13 +1,13 @@
 #!/bin/sh
 
 echo "setting up base directories and files"
-mkdir -p   /var/cache/farm
-chmod 0700 /var/cache/farm
+mkdir -p   /var/cache/farm /etc/local/.farm
+chmod 0700 /var/cache/farm /etc/local/.farm
 
-touch /etc/local/.config/inspect.root
+touch /etc/local/.farm/inspect.root
 
-if [ ! -f /etc/local/.config/expand.json ]; then
-	echo -n "{}" >/etc/local/.config/expand.json
+if [ ! -f /etc/local/.farm/expand.json ]; then
+	echo -n "{}" >/etc/local/.farm/expand.json
 fi
 
 if ! grep -q /opt/farm/ext/farm-inspector/cron/check.sh /etc/crontab; then
