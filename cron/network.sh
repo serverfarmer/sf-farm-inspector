@@ -3,7 +3,7 @@
 
 
 # http://fajne.it/automatyzacja-backupu-routera-mikrotik.html
-for router in `cat /etc/local/.farm/mikrotik.hosts`; do
+for router in `cat /etc/local/.farm/mikrotik.hosts |grep -v ^#`; do
 
 	if [ -z "${router##*:*}" ]; then
 		host="${router%:*}"
@@ -20,7 +20,7 @@ done
 
 
 # https://supportforums.cisco.com/document/110946/ssh-using-public-key-authentication-ios-and-big-outputs
-for router in `cat /etc/local/.farm/cisco.hosts`; do
+for router in `cat /etc/local/.farm/cisco.hosts |grep -v ^#`; do
 
 	if [ -z "${router##*:*}" ]; then
 		host="${router%:*}"

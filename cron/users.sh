@@ -4,7 +4,7 @@
 
 
 path=/etc/local/.farm
-servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts $path/problematic.hosts`"
+servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts $path/problematic.hosts |grep -v ^#`"
 
 for server in $servers; do
 

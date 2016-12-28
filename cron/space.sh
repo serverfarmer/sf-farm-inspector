@@ -30,7 +30,7 @@ ignore_root() {
 out=/var/cache/farm
 
 path=/etc/local/.farm
-servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts |grep -vxFf $path/openvz.hosts`"
+servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts |grep -vxFf $path/openvz.hosts |grep -v ^#`"
 
 expand=$path/expand.json
 inspect=$path/inspect.root
