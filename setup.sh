@@ -21,4 +21,4 @@ if ! grep -q /opt/farm/ext/farm-inspector/cron /etc/crontab; then
 	echo "10 7 * * 7   root /opt/farm/ext/farm-inspector/cron/space.sh --force" >>/etc/crontab
 fi
 
-/opt/farm/scripts/setup/role.sh sf-php
+/opt/farm/scripts/setup/extension.sh sf-php
