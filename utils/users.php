@@ -85,6 +85,10 @@ if (!empty($required_groups))
 
 foreach ($users as $login => $data) {
 	$uidgid = $data["uid"];
+
+	if (empty($data["shell"]))
+		$data["shell"] = "/bin/false";
+
 	$cmd = "useradd -s " . $data["shell"];
 
 	if (empty($data["usergroup"]))
