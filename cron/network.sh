@@ -1,6 +1,6 @@
 #!/bin/bash
 . /opt/farm/scripts/functions.custom
-. /opt/farm/scripts/functions.keys
+. /opt/farm/ext/keys/functions
 
 
 # http://fajne.it/automatyzacja-backupu-routera-mikrotik.html
