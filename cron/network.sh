@@ -7,11 +7,16 @@
 sshkey=`ssh_network_device_key_storage_filename mikrotik`
 for router in `cat /etc/local/.farm/mikrotik.hosts |grep -v ^#`; do
 
-	if [ -z "${router##*:*}" ]; then
-		host="${router%:*}"
-		port="${router##*:}"
-	else
-		host=$router
+	if [[ $router =~ ^[a-z0-9.-]+$ ]]; then
+		router="$router::"
+	elif [[ $router =~ ^[a-z0-9.-]+[:][0-9]+$ ]]; then
+		router="$router:"
+	fi
+
+	host=$(echo $router |cut -d: -f1)
+	port=$(echo $router |cut -d: -f2)
+
+	if [ "$port" = "" ]; then
 		port=22
 	fi
 
@@ -25,11 +30,16 @@ done
 sshkey=`ssh_network_device_key_storage_filename cisco`
 for router in `cat /etc/local/.farm/cisco.hosts |grep -v ^#`; do
 
-	if [ -z "${router##*:*}" ]; then
-		host="${router%:*}"
-		port="${router##*:}"
-	else
-		host=$router
+	if [[ $router =~ ^[a-z0-9.-]+$ ]]; then
+		router="$router::"
+	elif [[ $router =~ ^[a-z0-9.-]+[:][0-9]+$ ]]; then
+		router="$router:"
+	fi
+
+	host=$(echo $router |cut -d: -f1)
+	port=$(echo $router |cut -d: -f2)
+
+	if [ "$port" = "" ]; then
 		port=22
 	fi
 
