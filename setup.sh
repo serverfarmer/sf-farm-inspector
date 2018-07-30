@@ -1,5 +1,8 @@
 #!/bin/sh
 
+/opt/farm/scripts/setup/extension.sh sf-versioning
+/opt/farm/scripts/setup/extension.sh sf-php
+
 echo "setting up base directories and files"
 mkdir -p   /etc/local/.farm /var/cache/farm
 
@@ -20,5 +23,3 @@ if ! grep -q /opt/farm/ext/farm-inspector/cron /etc/crontab; then
 	echo "10 7 * * 1-6 root /opt/farm/ext/farm-inspector/cron/space.sh" >>/etc/crontab
 	echo "10 7 * * 7   root /opt/farm/ext/farm-inspector/cron/space.sh --force" >>/etc/crontab
 fi
-
-/opt/farm/scripts/setup/extension.sh sf-php

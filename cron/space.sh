@@ -56,7 +56,7 @@ for server in $servers; do
 	file=`create_json $out $host`
 
 	/opt/farm/ext/farm-inspector/utils/space.php $ignore $host $port root $sshkey $out/$file $expand $@ \
-		|/opt/farm/ext/farm-inspector/utils/save.sh $out $file &
+		|/opt/farm/ext/versioning/save.sh daily $out $file &
 
 done
 
@@ -64,4 +64,4 @@ ignore=`ignore_root $inspect $HOST`
 file=`create_json $out $HOST`
 
 /opt/farm/ext/farm-inspector/utils/space.php $ignore localhost - - - $out/$file $expand $@ \
-	|/opt/farm/ext/farm-inspector/utils/save.sh $out $file
+	|/opt/farm/ext/versioning/save.sh daily $out $file

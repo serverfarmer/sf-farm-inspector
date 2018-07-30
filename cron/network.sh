@@ -21,7 +21,7 @@ for router in `cat /etc/local/.farm/mikrotik.hosts |grep -v ^#`; do
 	fi
 
 	ssh -y -i $sshkey -p $port -o StrictHostKeyChecking=no admin@$host export \
-		|/opt/farm/ext/farm-inspector/utils/save.sh /var/cache/farm mikrotik-$host.config
+		|/opt/farm/ext/versioning/save.sh daily /var/cache/farm mikrotik-$host.config
 
 done
 
@@ -44,9 +44,9 @@ for router in `cat /etc/local/.farm/cisco.hosts |grep -v ^#`; do
 	fi
 
 	ssh -y -i $sshkey -p $port -o StrictHostKeyChecking=no admin@$host "show running-config" \
-		|/opt/farm/ext/farm-inspector/utils/save.sh /var/cache/farm cisco-$host.config
+		|/opt/farm/ext/versioning/save.sh daily /var/cache/farm cisco-$host.config
 
 	ssh -y -i $sshkey -p $port -o StrictHostKeyChecking=no admin@$host "show tech-support" \
-		|/opt/farm/ext/farm-inspector/utils/save.sh /var/cache/farm cisco-$host.tech
+		|/opt/farm/ext/versioning/save.sh daily /var/cache/farm cisco-$host.tech
 
 done
