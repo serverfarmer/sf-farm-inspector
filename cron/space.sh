@@ -1,7 +1,5 @@
 #!/bin/bash
 . /opt/farm/scripts/init
-. /opt/farm/scripts/functions.custom
-. /opt/farm/ext/keys/functions
 
 
 create_json() {
@@ -51,7 +49,7 @@ for server in $servers; do
 		port=22
 	fi
 
-	sshkey=`ssh_management_key_storage_filename $host`
+	sshkey=`/opt/farm/ext/keys/get-ssh-management-key.sh $host`
 	ignore=`ignore_root $inspect $host`
 	file=`create_json $out $host`
 

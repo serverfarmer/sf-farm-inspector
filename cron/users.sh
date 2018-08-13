@@ -1,7 +1,5 @@
 #!/bin/bash
 . /opt/farm/scripts/init
-. /opt/farm/scripts/functions.custom
-. /opt/farm/ext/keys/functions
 
 
 path=/etc/local/.farm
@@ -22,7 +20,7 @@ for server in $servers; do
 		port=22
 	fi
 
-	sshkey=`ssh_management_key_storage_filename $host`
+	sshkey=`/opt/farm/ext/keys/get-ssh-management-key.sh $host`
 
 	/opt/farm/ext/farm-inspector/utils/users.php $host root@$host $port root $sshkey \
 		|/opt/farm/ext/versioning/save.sh daily /var/cache/farm users-$host.script
