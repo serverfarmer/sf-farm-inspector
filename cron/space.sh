@@ -27,7 +27,6 @@ ignore_root() {
 
 
 out=/var/cache/farm
-
 path=/etc/local/.farm
 servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts |grep -vxFf $path/openvz.hosts |grep -v ^#`"
 
@@ -53,7 +52,7 @@ for server in $servers; do
 	ignore=`ignore_root $inspect $host`
 	file=`create_json $out $host`
 
-	/opt/farm/ext/farm-inspector/utils/space.php $ignore $host $port root $sshkey $out/$file $expand $@ \
+	/opt/farm/ext/farm-inspector/internal/space.php $ignore $host $port root $sshkey $out/$file $expand $@ \
 		|/opt/farm/ext/versioning/save.sh daily $out $file &
 
 done
@@ -61,5 +60,5 @@ done
 ignore=`ignore_root $inspect $HOST`
 file=`create_json $out $HOST`
 
-/opt/farm/ext/farm-inspector/utils/space.php $ignore localhost - - - $out/$file $expand $@ \
+/opt/farm/ext/farm-inspector/internal/space.php $ignore localhost - - - $out/$file $expand $@ \
 	|/opt/farm/ext/versioning/save.sh daily $out $file

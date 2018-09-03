@@ -19,7 +19,11 @@ fi
 
 if ! grep -q /opt/farm/ext/farm-inspector/cron /etc/crontab; then
 	echo "48 6 * * *   root /opt/farm/ext/farm-inspector/cron/users.sh" >>/etc/crontab
-	echo "49 6 * * *   root /opt/farm/ext/farm-inspector/cron/network.sh" >>/etc/crontab
 	echo "10 7 * * 1-6 root /opt/farm/ext/farm-inspector/cron/space.sh" >>/etc/crontab
 	echo "10 7 * * 7   root /opt/farm/ext/farm-inspector/cron/space.sh --force" >>/etc/crontab
+fi
+
+# transitional code
+if grep -q /opt/farm/ext/farm-inspector/cron/network.sh /etc/crontab; then
+	sed -i -e "/\/opt\/farm\/ext\/farm-inspector\/cron\/network.sh/d" /etc/crontab
 fi
