@@ -94,8 +94,9 @@ foreach ($lines as $line) {
 	$fields = explode(":", $line);
 	$login = $fields[0];
 	$password = $fields[1];
+	$changed = !is_numeric($fields[2]) ? $fields[2] : date("Y-m-d", $fields[2] * 86400);
 	if ($password != "" && $password != "*" && $password != "!" && in_array($login, $ignored_passwords, true) === false)
-		$shadow[$login] = $password;
+		$shadow[$login] = array($password, $changed);
 }
 
 // end of gathering data, now print out the commands
@@ -163,7 +164,7 @@ foreach ($users as $login => $data)
 
 echo "\n";
 foreach ($shadow as $login => $password)
-	echo "shadow $login $password\n";
+	echo "shadow $login $password[0] (changed $password[1])\n";
 
 echo "\n";
 foreach ($users as $login => $data) {
