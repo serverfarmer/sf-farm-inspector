@@ -131,7 +131,7 @@ foreach ($users as $login => $data) {
 	if (!empty($data["gecos"]))
 		$cmd .= " -c \"" . $data["gecos"] . "\"";
 
-	if (strpos($data["home"], "/srv/") === 0 || strpos($data["home"], "/data/") === 0 || strpos($data["home"], "/var/") === 0)
+	if (strpos($data["home"], "/srv/") === 0 || strpos($data["home"], "/data/") === 0 || strpos($data["home"], "/var/") === 0 || strpos($data["home"], "/opt/") === 0)
 		$cmd .= " -m -d " . $data["home"];
 	else if (strpos($data["home"], "/home/") === 0)
 		$cmd .= " -m";
@@ -168,7 +168,7 @@ foreach ($shadow as $login => $password)
 
 echo "\n";
 foreach ($users as $login => $data) {
-	if (strpos($data["home"], "/srv/") === 0 || strpos($data["home"], "/data/") === 0 || strpos($data["home"], "/var/") === 0) {
+	if (strpos($data["home"], "/srv/") === 0 || strpos($data["home"], "/data/") === 0 || strpos($data["home"], "/var/") === 0 || strpos($data["home"], "/opt/") === 0) {
 		$home = $data["home"];
 		$parent = dirname($home);
 		echo "rsync -e \"ssh -i /etc/local/.ssh/key-$target\" -av $target:$home $parent\n";
