@@ -3,17 +3,20 @@
 // Analyze /etc/passwd and /etc/group files, and print out set of commands
 // creating all found users and groups, along with their directories and
 // synchronizing data.
-// Tomasz Klim, Aug 2014, Feb 2016
+// Tomasz Klim, Aug 2014, Feb 2016, Oct 2018
 
 
-$minuid = 1001;
+$mingid = 200;
+$minuid = 200;
 $maxuid = 65500;
 
-$mingid = 1001;
 $required_groups = array();
+$ignored_users = array("newrelic", "ubuntu");
+$ignored_passwords = array("root");
+$ignored_supplemental_system_groups = array("audio", "bluetooth", "cdrom", "dip", "floppy", "lpadmin", "netdev", "plugdev", "video");
 
 if ($argc < 6)
-	die("usage: php users.php <hostname> <target> <port> <user> <key>\n");
+	die("usage: php users.php <hostname> <target> <port> <user> <key> [ignore-user(s)]\n");
 
 $hostname = $argv[1];  // local mode if empty
 $target = $argv[2];
@@ -21,20 +24,27 @@ $port = ( is_numeric($argv[3]) ? intval($argv[3]) : 22 );
 $user = $argv[4];
 $sshkey = $argv[5];
 
+if (!empty($argv[6])) {
+	$list = explode(",", $argv[6]);
+	foreach ($list as $entry) {
+		$ignored_users[] = $entry;
+		$ignored_passwords[] = $entry;
+	}
+}
+
 // end of configuration, now functions
 
-function readdb($file, $hostname, $port, $user, $sshkey) {
-	if (empty($hostname))
-		return file_get_contents($file);
-	else {
-		$command = "ssh -i $sshkey -p $port -o StrictHostKeyChecking=no $user@$hostname \"cat $file\"";
-		return shell_exec($command);
-	}
+function execute($command, $hostname, $port, $user, $sshkey) {
+	if (!empty($hostname))
+		$command = "ssh -i $sshkey -p $port -o StrictHostKeyChecking=no $user@$hostname \"$command\"";
+	return shell_exec($command);
 }
 
 // end of functions, now gathering data
 
-$data = readdb("/etc/group", $hostname, $port, $user, $sshkey);
+$uname = trim(execute("uname -a", $hostname, $port, $user, $sshkey));
+
+$data = execute("cat /etc/group", $hostname, $port, $user, $sshkey);
 $lines = explode("\n", $data);
 $groups = array();
 
@@ -48,7 +58,7 @@ foreach ($lines as $line) {
 	);
 }
 
-$data = readdb("/etc/passwd", $hostname, $port, $user, $sshkey);
+$data = execute("cat /etc/passwd", $hostname, $port, $user, $sshkey);
 $lines = explode("\n", $data);
 $users = array();
 
@@ -58,7 +68,7 @@ foreach ($lines as $line) {
 	$login = $fields[0];
 	$uid = $fields[2];
 	$gid = $fields[3];
-	if ($uid >= $minuid && $uid <= $maxuid) {
+	if ($uid >= $minuid && $uid <= $maxuid && in_array($login, $ignored_users, true) === false) {
 		$users[$login] = array(
 			"login" => $login,
 			"group" => $groups[$gid]["group"],
@@ -75,7 +85,24 @@ foreach ($lines as $line) {
 	}
 }
 
+$data = execute("cat /etc/shadow", $hostname, $port, $user, $sshkey);
+$lines = explode("\n", $data);
+$shadow = array();
+
+foreach ($lines as $line) {
+	if (empty($line)) continue;
+	$fields = explode(":", $line);
+	$login = $fields[0];
+	$password = $fields[1];
+	if ($password != "" && $password != "*" && $password != "!" && in_array($login, $ignored_passwords, true) === false)
+		$shadow[$login] = $password;
+}
+
 // end of gathering data, now print out the commands
+
+$date = date("Y-m-d");
+echo "# $uname\n";
+echo "# generated at $date\n#\n\n";
 
 foreach ($required_groups as $gid => $group)
 	echo "groupadd -g $gid $group\n";
@@ -119,7 +146,7 @@ foreach ($groups as $gid => $data) {
 	if (!empty($data["supplemental"])) {
 		$group = $data["group"];
 		foreach ($data["supplemental"] as $login)
-			if (isset($users[$login]))
+			if (isset($users[$login]) && in_array($group, $ignored_supplemental_system_groups, true) == false)
 				echo "usermod -G $group -a $login\n";
 	}
 }
@@ -133,6 +160,10 @@ echo "\n";
 foreach ($users as $login => $data)
 	if (strpos($login, "smb-") === false && strpos($login, "rsync-") === false && strpos($login, "sshfs-") === false && $login != "motion")
 		echo "passwd $login\n";
+
+echo "\n";
+foreach ($shadow as $login => $password)
+	echo "shadow $login $password\n";
 
 echo "\n";
 foreach ($users as $login => $data) {

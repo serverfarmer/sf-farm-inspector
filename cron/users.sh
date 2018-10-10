@@ -1,10 +1,12 @@
 #!/bin/bash
 . /opt/farm/scripts/init
+. /opt/farm/scripts/functions.custom
 
 
 out=/var/cache/farm
 path=/etc/local/.farm
-servers="`cat $path/virtual.hosts $path/physical.hosts $path/workstation.hosts $path/problematic.hosts |grep -v ^#`"
+admin=`primary_admin_account`
+servers="`cat $path/virtual.hosts $path/physical.hosts $path/cloud.hosts $path/lxc.hosts $path/workstation.hosts $path/problematic.hosts |grep -v ^#`"
 
 for server in $servers; do
 
@@ -23,10 +25,10 @@ for server in $servers; do
 
 	sshkey=`/opt/farm/ext/keys/get-ssh-management-key.sh $host`
 
-	/opt/farm/ext/farm-inspector/internal/users.php $host root@$host $port root $sshkey \
+	/opt/farm/ext/farm-inspector/internal/users.php $host root@$host $port root $sshkey $admin \
 		|/opt/farm/ext/versioning/save.sh daily $out users-$host.script
 
 done
 
-/opt/farm/ext/farm-inspector/internal/users.php "" root@$HOST "" "" "" \
+/opt/farm/ext/farm-inspector/internal/users.php "" root@$HOST "" "" "" $admin \
 	|/opt/farm/ext/versioning/save.sh daily $out users-$HOST.script
