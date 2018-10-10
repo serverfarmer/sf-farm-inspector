@@ -13,7 +13,7 @@ $maxuid = 65500;
 $required_groups = array();
 $ignored_users = array("newrelic", "ubuntu");
 $ignored_passwords = array("root");
-$ignored_supplemental_system_groups = array("audio", "bluetooth", "cdrom", "dip", "floppy", "lpadmin", "netdev", "plugdev", "video");
+$ignored_supplemental_system_groups = array("audio", "bluetooth", "cdrom", "dialout", "dip", "floppy", "games", "lpadmin", "netdev", "video");
 
 if ($argc < 6)
 	die("usage: php users.php <hostname> <target> <port> <user> <key> [ignore-user(s)]\n");
