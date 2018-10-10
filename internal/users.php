@@ -159,7 +159,7 @@ foreach ($users as $login => $data)
 
 echo "\n";
 foreach ($users as $login => $data)
-	if (strpos($login, "smb-") === false && strpos($login, "rsync-") === false && strpos($login, "sshfs-") === false && $login != "motion")
+	if (strpos($login, "smb-") === false && strpos($login, "rsync-") === false && strpos($login, "sshfs-") === false && !isset($shadow[$login]) && $login != "motion")
 		echo "passwd $login\n";
 
 echo "\n";
